@@ -1,4 +1,5 @@
 gem 'chef'
+gem 'berkshelf'
 gem 'knife-solo',
     :github => 'matschaffer/knife-solo',
     :branch => 'master',

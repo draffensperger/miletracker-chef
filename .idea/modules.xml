@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/chef-repo.iml" filepath="$PROJECT_DIR$/.idea/chef-repo.iml" />
       <module fileurl="file://$USER_HOME$/Dropbox/Programming/miletracker_docs/.idea/miletracker_docs.iml" filepath="$USER_HOME$/Dropbox/Programming/miletracker_docs/.idea/miletracker_docs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../trackmiles-chef/.idea/trackmiles-chef.iml" filepath="$PROJECT_DIR$/../trackmiles-chef/.idea/trackmiles-chef.iml" />
     </modules>
   </component>
 </project>
