@@ -37,6 +37,11 @@ Install the Berkshelf cookbooks locally
         bin/berks vendor cookbooks/
         bin/berks install
 
+### Edit Encrypted Data bags if needed
+
+For instance, to change the firewall rules:
+    EDITOR=leafpad bin/knife solo data bag edit firewall trackmiles
+
 ### Setup Chef on the remote machine
 
 Note that we now use the new port number for added security.
@@ -58,3 +63,22 @@ Push master to the server
 
 Visit http://localhost (assuming forwarded ports 80 and 443).
 ssh -p 38214 deploy@localhost
+
+{
+  "id": "trackmiles",
+    "rules": [
+        {"http": {
+            "port": "80",
+   	    "protocol":"tcp"
+        }},
+        {"https": {
+            "port": "443",
+ 	   "protocol":"tcp"
+        }},
+        {"ssh on custom port": {
+            "port": "38214",
+            "source": "127.0.0.1",
+            "protocol":"tcp"
+        }}
+    ]
+}

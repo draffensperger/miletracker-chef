@@ -10,6 +10,7 @@ GIT
       net-ssh (>= 2.2.2, < 3.0)
 
 GEM
+  remote: https://rubygems.org/
   specs:
     addressable (2.3.6)
     berkshelf (3.1.2)
@@ -80,6 +81,7 @@ GEM
     hitimes (1.2.1)
     ipaddress (0.8.0)
     json (1.8.1)
+    knife-solo_data_bag (1.1.0)
     method_source (0.8.2)
     mime-types (1.25.1)
     minitar (0.5.4)
@@ -158,3 +160,4 @@ DEPENDENCIES
   berkshelf
   chef
   knife-solo!
+  knife-solo_data_bag
