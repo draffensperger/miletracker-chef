@@ -26,45 +26,35 @@ Install Chef
 
 Install necessary gems
 
-        bundle install
+        bundle install  --binstubs
+
+Also install berkshelf locally so that Chef solo knows to install Berks files
+
+        gem install berkshelf
+
+Install the Berkshelf cookbooks locally
+
+        bin/berks vendor cookbooks/
+        bin/berks install
 
 ### Setup Chef on the remote machine
+
 Note that we now use the new port number for added security.
 
-        bundle exec knife solo prepare -p 38214 deploy@localhost nodes/trackmiles.json
+        bin/knife solo prepare -p 38214 deploy@localhost nodes/trackmiles.json
 
 ### Execute the Chef cookbook to setup the machine
 
 If you change the Chef cookbooks, then this will need to be updated.
 
-        bundle exec knife solo cook -p 38214 deploy@localhost nodes/trackmiles.json
+        bin/knife solo cook -p 38214 deploy@localhost nodes/trackmiles.json
 
 ### Push the TrackMiles code with to the machine
+
+Add remote
+Push master to the server
 
 ### Test the deployment
 
 Visit http://localhost (assuming forwarded ports 80 and 443).
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2014 David Raffensperger
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+ssh -p 38214 deploy@localhost
