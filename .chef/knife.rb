@@ -12,4 +12,5 @@ data_bag_path    "data_bags"
 
 knife[:berkshelf_path] = "cookbooks"
 
-knife[:secret_file] = "/home/dave/trackmiles_chef_secret.txt"
+knife[:secret_file] = ".chef/encrypted_data_bag_secret"
+encrypted_data_bag_secret ".chef/encrypted_data_bag_secret"

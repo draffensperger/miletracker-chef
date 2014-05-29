@@ -1,1 +1,5 @@
-{ "run_list": ["role[trackmiles]"] }
+{
+    "id": "trackmiles",
+    "run_list": ["role[trackmiles]"],
+    "firewall": {"rules": []}
+}
