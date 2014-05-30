@@ -1,5 +1,4 @@
 {
     "id": "trackmiles",
-    "run_list": ["role[trackmiles]"],
-    "firewall": {"rules": []}
+    "run_list": ["role[trackmiles]"]
 }

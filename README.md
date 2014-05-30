@@ -3,7 +3,7 @@ This is useful for an actual deployment or for setting up a local staging or tes
 
 ## Setup Instructions
 
-In this document, I'll be using the example of deploying t `localhost` on port 38214 (which could
+In this document, I'll be using the example of deploying to `localhost` on port 38214 (which could
 be forwarded to a virtual machine), but to deploy to a Droplet you would just change the port and machine.
 
 ### Provision Virtual Machine, e.g. set up Ubuntu 14.04 VirtualBox or Digital Ocean Droplet, etc.
@@ -37,15 +37,33 @@ Install the Berkshelf cookbooks locally
         bin/berks vendor cookbooks/
         bin/berks install
 
-### Edit Encrypted Data bags if needed
+### Edit encrypted data bags
 
-To create an encrypted data bag:
-
-        EDITOR=leafpad bin/knife solo data bag create firewall trackmiles
-
-For instance, to change the firewall rules:
+If you adapt these cookbooks for your own project, you will need to modify the
+encrypted data bags, like `data_bags/firewall/trackmiles.json`. To edit, run:
 
         EDITOR=leafpad bin/knife solo data bag edit firewall trackmiles
+
+Here's an example file that only allows SSH access on the custom port, e.g. 38214.
+
+        {
+          "id": "trackmiles",
+            "rules": [
+                {"http": {
+                    "port": "80",
+                    "protocol":"tcp"
+                }},
+                {"https": {
+                    "port": "443",
+                    "protocol":"tcp"
+                }},
+                {"ssh on custom port": {
+                    "port": "38214",
+                    "source": "127.0.0.1",
+                    "protocol":"tcp"
+                }}
+            ]
+        }
 
 ### Setup Chef on the remote machine
 
@@ -69,27 +87,4 @@ Push master to the server
 Visit http://localhost (assuming forwarded ports 80 and 443).
 ssh -p 38214 deploy@localhost
 
-## Sample Data Bag Files
-
-### Sample Firewall Rules
-
-For `data_bags/firewall/trackmiles.json` :
-
-        {
-          "id": "trackmiles",
-            "rules": [
-                {"http": {
-                    "port": "80",
-                "protocol":"tcp"
-                }},
-                {"https": {
-                    "port": "443",
-               "protocol":"tcp"
-                }},
-                {"ssh on custom port": {
-                    "port": "38214",
-                    "source": "127.0.0.1",
-                    "protocol":"tcp"
-                }}
-            ]
-        }
+        EDITOR=leafpad knife solo data bag create test_encrypted test

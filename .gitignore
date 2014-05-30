@@ -5,4 +5,6 @@
 ###
 .chef/*.pem
 .chef/encrypted_data_bag_secret
-data_bags/*
+
+## Ignore RubyMine files
+.idea/*
