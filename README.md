@@ -15,9 +15,15 @@ Change root password if needed (Useful for Digital Ocean boxes)
 
         ./setup_deploy_user.sh root@localhost
 
-# Set up basic secure access via public keys on a non-default SSH port
+### Set up basic secure access via public keys, custom SSH port
 
+        cat ~/.ssh/id_rsa.pub | ssh -p 2222 deploy@localhost 'mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys'
         ./setup_ssh_access.sh deploy@localhost ~/.ssh/id_rsa.pub 38214
+
+You can change the host settings in `~/.ssh/config`, to make ssh use the port automatically, e.g.
+
+        Host example.com
+            Port 1234
 
 ### Set up Chef Locally
 Install Chef
@@ -44,23 +50,15 @@ encrypted data bags, like `data_bags/firewall/trackmiles.json`. To edit, run:
 
         EDITOR=leafpad bin/knife solo data bag edit firewall trackmiles
 
-Here's an example file that only allows SSH access on the custom port, e.g. 38214.
+Here's an example file that only allows SSH access from a single IP address.
 
         {
           "id": "trackmiles",
             "rules": [
-                {"http": {
-                    "port": "80",
-                    "protocol":"tcp"
-                }},
-                {"https": {
-                    "port": "443",
-                    "protocol":"tcp"
-                }},
-                {"ssh on custom port": {
-                    "port": "38214",
-                    "source": "127.0.0.1",
-                    "protocol":"tcp"
+                {"ssh from limited hosts": {
+                    "port": "22",
+                    "source": "10.0.2.2",
+                    "protocol": "tcp"
                 }}
             ]
         }
@@ -69,13 +67,53 @@ Here's an example file that only allows SSH access on the custom port, e.g. 3821
 
 Note that we now use the new port number for added security.
 
-        bin/knife solo prepare -p 38214 deploy@localhost nodes/trackmiles.json
+        bin/knife solo prepare -p 2222 deploy@localhost nodes/trackmiles.json
 
 ### Execute the Chef cookbook to setup the machine
 
 If you change the Chef cookbooks, then this will need to be updated.
 
-        bin/knife solo cook -p 38214 deploy@localhost nodes/trackmiles.json
+        bin/knife solo cook -p 2222 deploy@localhost nodes/trackmiles.json
+
+Set up Dokku
+
+        wget -qO- https://raw.github.com/progrium/dokku/master/bootstrap.sh | sudo bash
+
+Add the key to Dokku by first SSH'ing into the host:
+
+        cat ~/.ssh/id_rsa.pub | ssh -p 2222 root@localhost "sudo sshcommand acl-add dokku trackmiles"
+        git remote add staging dokku@localhost:trackmiles2
+        git push staging master
+
+Need to install a dokku plugin:
+
+        https://github.com/musicglue/dokku-user-env-compile
+
+        ssh deploy@localhost
+
+        ssh -p 2222 dokku@localhost
+
+        sudo chsh -s /bin/bash dokku
+
+Then transfer the authorized key to dokku
+
+        cat ~/.ssh/authorized_keys | sudo sshcommand acl-add dokku trackmiles
+        sudo restart ssh
+
+Get the trackmiles code, cd to the directory then run:
+
+### My next steps with Chef
+
+        dokku
+        https://github.com/fgrehm/chef-dokku
+
+        need to configure dokku plugins too, e.g. for postgres and rails
+
+        some day maybe set up PHP, etc.
+
+        new relic
+        http://community.opscode.com/cookbooks/newrelic
+
 
 ### Push the TrackMiles code with to the machine
 
@@ -85,6 +123,5 @@ Push master to the server
 ### Test the deployment
 
 Visit http://localhost (assuming forwarded ports 80 and 443).
-ssh -p 38214 deploy@localhost
 
         EDITOR=leafpad knife solo data bag create test_encrypted test

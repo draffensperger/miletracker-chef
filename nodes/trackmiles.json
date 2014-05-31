@@ -1,4 +1,13 @@
 {
     "id": "trackmiles",
-    "run_list": ["role[trackmiles]"]
+    "run_list": ["role[trackmiles]"],
+    "dokku": {
+        "apps": {
+            "trackmiles": {
+                "env": {
+                    "TEST": "VALUE"
+                }
+            }
+        }
+    }
 }
