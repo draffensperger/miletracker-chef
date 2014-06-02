@@ -3,32 +3,7 @@
     "name": "trackmiles",
     "description": "TrackMiles Server Configuration",
     "run_list": [
-        "recipe[chef-solo-search]",
-        "recipe[server-access]",
-        "recipe[apt-periodic]",
-        "recipe[logrotate]",
-        "recipe[resolver]"
-    ],
-    "default_attributes": {
-        "dokku": {
-            "tag": "HEAD",
-            "apps": {
-                "trackmiles": {
-                    "domain": "test",
-                    "env": {
-                        "TEST": "VALUE"
-                    }
-                }
-            }
-        },
-        "apt-periodic": {
-            "unattended_upgrade_interioval": "1",
-            "unattended_upgrades": {
-                "mail": "contact@davidraff.com"
-            }
-        },
-        "resolver": {
-            "nameservers": ["8.8.8.8", "8.8.4.4"]
-        }
-    }
+        "role[core-server]",
+        "recipe[setup-dokku]"
+    ]
 }

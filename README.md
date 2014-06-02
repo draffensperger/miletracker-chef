@@ -1,3 +1,8 @@
+Update metadata.rb files and README.md files
+Make the server access depend on a node attribute for its data bag location and make it read that
+Do the dokku setup with a similar encrypted data bag for the environment variables
+Test the dokku setup with a deploy
+
 This Project gives information on how to deploy a server to run the TrackMiles website.
 This is useful for an actual deployment or for setting up a local staging or test environment.
 
@@ -48,7 +53,7 @@ Install the Berkshelf cookbooks locally
 If you adapt these cookbooks for your own project, you will need to modify the
 encrypted data bags, like `data_bags/firewall/trackmiles.json`. To edit, run:
 
-        EDITOR=leafpad bin/knife solo data bag edit firewall trackmiles
+        EDITOR=leafpad bin/knife solo data bag edit ssh-access common
 
 Here's an example file that only allows SSH access from a single IP address.
 
@@ -124,4 +129,4 @@ Push master to the server
 
 Visit http://localhost (assuming forwarded ports 80 and 443).
 
-        EDITOR=leafpad knife solo data bag create test_encrypted test
+        EDITOR=leafpad knife solo data bag edit ssh-access common

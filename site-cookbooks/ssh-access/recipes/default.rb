@@ -1,4 +1,5 @@
-access = Chef::EncryptedDataBagItem.load('access', 'access').to_hash
+access = EncryptedDataBagItem.load('ssh-access',
+                                   node['ssh-access-databag']).to_hash
 
 user 'root' do
   action :lock
@@ -6,7 +7,7 @@ end
 
 user 'deploy' do
   action :create
-  password access['deploy_password']
+  password access['deploy_sudo_password']
   home '/home/deploy'
   shell '/bin/bash'
 end

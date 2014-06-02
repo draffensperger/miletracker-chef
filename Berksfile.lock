@@ -5,12 +5,10 @@ DEPENDENCIES
     git: git://github.com/rlister/chef-dokku-simple.git
     revision: ba62bfc6ea00a121e9a0fc5dba02f3c7605c8798
   fail2ban
+  firewall
   logrotate
   openssh
   resolver
-  ufw
-    git: git://github.com/draffensperger/ufw.git
-    revision: 633491a1fc20e0ef13ae17a46b81a4bc9d6b9f61
 
 GRAPH
   apt (2.4.0)
@@ -27,8 +25,6 @@ GRAPH
   openssh (1.3.4)
     iptables (>= 0.0.0)
   resolver (1.1.4)
-  ufw (0.7.5)
-    firewall (>= 0.9.0)
   yum (3.2.0)
   yum-epel (0.3.6)
     yum (~> 3.0)

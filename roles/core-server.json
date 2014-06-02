@@ -1,0 +1,20 @@
+{
+    "json_class": "Chef::Role",
+    "name": "core-server",
+    "description": "Basic Server Configuration",
+    "run_list": [
+        "recipe[ssh-access]",
+        "recipe[apt-periodic]",
+        "recipe[logrotate]",
+        "recipe[resolver]"
+    ],
+    "default_attributes": {
+        "ssh-access-databag": "common",
+        "apt-periodic": {
+            "unattended_upgrade_interioval": "1"
+        },
+        "resolver": {
+            "nameservers": ["8.8.8.8", "8.8.4.4"]
+        }
+    }
+}
