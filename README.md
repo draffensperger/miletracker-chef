@@ -17,7 +17,7 @@ Change root password if needed (Useful for Digital Ocean boxes)
 
 ### Set up basic secure access via public keys, custom SSH port
 
-        cat ~/.ssh/id_rsa.pub | ssh -p 2222 deploy@localhost 'mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys'
+        cat ~/.ssh/id_rsa.pub | ssh deploy@localhost 'mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys'
         ./setup_ssh_access.sh deploy@localhost ~/.ssh/id_rsa.pub 38214
 
 You can change the host settings in `~/.ssh/config`, to make ssh use the port automatically, e.g.
@@ -67,13 +67,13 @@ Here's an example file that only allows SSH access from a single IP address.
 
 Note that we now use the new port number for added security.
 
-        bin/knife solo prepare -p 2222 deploy@localhost nodes/trackmiles.json
+        bin/knife solo prepare deploy@localhost nodes/trackmiles.json
 
 ### Execute the Chef cookbook to setup the machine
 
 If you change the Chef cookbooks, then this will need to be updated.
 
-        bin/knife solo cook -p 2222 deploy@localhost nodes/trackmiles.json
+        bin/knife solo cook deploy@localhost nodes/trackmiles.json
 
 Set up Dokku
 

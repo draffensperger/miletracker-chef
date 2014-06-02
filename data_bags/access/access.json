@@ -1,0 +1,27 @@
+{
+  "id": "access",
+  "ssh_port": {
+    "encrypted_data": "Rh8gI84kRTZHZcDqiL6AynXrJIJdi+UetduPTgD+cbk=\n",
+    "iv": "gxmwEd1LP3cXP5j+zKFDkw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "ssh_allowed_hosts": {
+    "encrypted_data": "Wzh6JcGikAX+Fy3s51j8fsF6g/Gq9/lqu5LJbJWySop9C+HsuIp6USOb3u6i\nxfeL\n",
+    "iv": "/9TZIljPbs0X0XhXoVpcDw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "deploy_password": {
+    "encrypted_data": "58yEE3a4+7wFMYq0MoUe8TflkrVhl4g+cIaC69krI1XI2pizXHlO9XCXQqLb\n/Au8kuXnmnd4sXbDjXCKgIcnzw==\n",
+    "iv": "Wtn7GvxedRVgjRKIjz/7pQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "deploy_authorized_keys": {
+    "encrypted_data": "MehjB6QEhXZqyAOAaJnu8bDDWqFzLjJ31Z7KJOY+6d6CClNw6AlTaeaZSSkF\n5jtXs9i2HvWbnrxnlFukPM4wQNZV6wT9orqaJ/xUdaSmxgQjxPoDCsObs0XK\nEqWBb68JCWN2p3lZOtvfgWnX8NbezRqu3L8VCB1EEFK5QYZXe65nP2Ngh1TH\n9q6m3VUeSvS7wZTiKAPIW0XUdt7woWgJ1MOPMo2RmanFj5gOsueaKY//ANbz\nxge0OlKGNFGPH8dDHCS8YU/dIu2TXtn9BVx+nQi4cy08Bg9p6dDpkUzCndHF\nHRNAWcLGFofOnz/1tTSoSQL/aI00dhhtWclKqDwT7P2RPhBLwL1NndiARxnN\nUpOo75adUZHrJJ3TbAptmzkGUGUa4AUmITfS+CoF0ZQQ+/Tu7IMxSt/3iBHL\nMUkgVqv95A+CmZYebb2kvpCom1i/+9qcfGjEmSveRdr8bCOIcyzt7EtyITow\nrYjHbWxqRipD9DGi7VPrPRk2Da7W6L3dUDjxiRd/JWqe7PyDdGiaUVOoJUfF\nSlu2xrnr9jxceaBQWDLLRj8GqjokcR7v9HhX\n",
+    "iv": "n6t066fL6u/mNOaDK9V9vg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

@@ -4,35 +4,31 @@
     "description": "TrackMiles Server Configuration",
     "run_list": [
         "recipe[chef-solo-search]",
-        "recipe[ufw::databag]",
+        "recipe[server-access]",
         "recipe[apt-periodic]",
-        "recipe[fail2ban]",
         "recipe[logrotate]",
         "recipe[resolver]"
     ],
-    "override_attributes": {
+    "default_attributes": {
+        "dokku": {
+            "tag": "HEAD",
+            "apps": {
+                "trackmiles": {
+                    "domain": "test",
+                    "env": {
+                        "TEST": "VALUE"
+                    }
+                }
+            }
+        },
         "apt-periodic": {
             "unattended_upgrade_interioval": "1",
             "unattended_upgrades": {
                 "mail": "contact@davidraff.com"
             }
-        }
-    },
-    "default_attributes": {
+        },
         "resolver": {
             "nameservers": ["8.8.8.8", "8.8.4.4"]
-        },
-        "firewall": {
-            "rules": [
-                {"http": {
-                    "port": "80",
-                    "protocol":"tcp"
-                }},
-                {"https": {
-                    "port": "443",
-                    "protocol":"tcp"
-                }}
-            ]
         }
     }
 }
