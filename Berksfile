@@ -2,7 +2,7 @@ source 'https://api.berkshelf.com'
 
 cookbook 'apt-periodic'
 cookbook 'chef-solo-search'
-cookbook 'dokku-simple', github: 'rlister/chef-dokku-simple'
+cookbook 'dokku', github: 'fgrehm/chef-dokku'
 cookbook 'fail2ban'
 cookbook 'firewall'
 cookbook 'logrotate'

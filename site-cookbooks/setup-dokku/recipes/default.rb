@@ -1,8 +1,9 @@
 node.set['dokku'] = {
     tag: 'HEAD',
+    vhost: 'test',
+    ssh_users: 'deploy',
     apps: {
       trackmiles: {
-        domain: 'test',
           env: {
             TEST: 'VALUE'
           }

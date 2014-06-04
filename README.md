@@ -1,7 +1,8 @@
-Update metadata.rb files and README.md files
-Make the server access depend on a node attribute for its data bag location and make it read that
-Do the dokku setup with a similar encrypted data bag for the environment variables
-Test the dokku setup with a deploy
+Options for dokku-simple
+Create a data bag on the fly
+Fork the project
+Be OK with an unencrypted public deploy key
+
 
 This Project gives information on how to deploy a server to run the TrackMiles website.
 This is useful for an actual deployment or for setting up a local staging or test environment.
@@ -16,19 +17,9 @@ Change root password if needed (Useful for Digital Ocean boxes)
 
         ssh -t root@localhost 'passwd'
 
-### Create deploy user if not already there
+### Set up basic secure access via public key if not already setup
 
-        ./setup_deploy_user.sh root@localhost
-
-### Set up basic secure access via public keys, custom SSH port
-
-        cat ~/.ssh/id_rsa.pub | ssh deploy@localhost 'mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys'
-        ./setup_ssh_access.sh deploy@localhost ~/.ssh/id_rsa.pub 38214
-
-You can change the host settings in `~/.ssh/config`, to make ssh use the port automatically, e.g.
-
-        Host example.com
-            Port 1234
+        cat ~/.ssh/id_rsa.pub | ssh root@localhost 'mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys'
 
 ### Set up Chef Locally
 Install Chef
@@ -45,28 +36,14 @@ Also install berkshelf locally so that Chef solo knows to install Berks files
 
 Install the Berkshelf cookbooks locally
 
-        bin/berks vendor cookbooks/
         bin/berks install
 
 ### Edit encrypted data bags
 
 If you adapt these cookbooks for your own project, you will need to modify the
-encrypted data bags, like `data_bags/firewall/trackmiles.json`. To edit, run:
+encrypted data bags, e.g.:
 
         EDITOR=leafpad bin/knife solo data bag edit ssh-access common
-
-Here's an example file that only allows SSH access from a single IP address.
-
-        {
-          "id": "trackmiles",
-            "rules": [
-                {"ssh from limited hosts": {
-                    "port": "22",
-                    "source": "10.0.2.2",
-                    "protocol": "tcp"
-                }}
-            ]
-        }
 
 ### Setup Chef on the remote machine
 
@@ -80,9 +57,13 @@ If you change the Chef cookbooks, then this will need to be updated.
 
         bin/knife solo cook deploy@localhost nodes/trackmiles.json
 
-Set up Dokku
+Notes for myself:
 
-        wget -qO- https://raw.github.com/progrium/dokku/master/bootstrap.sh | sudo bash
+============
+
+Do the dokku setup with a similar encrypted data bag for the environment variables
+Test the dokku setup with a deploy
+
 
 Add the key to Dokku by first SSH'ing into the host:
 
