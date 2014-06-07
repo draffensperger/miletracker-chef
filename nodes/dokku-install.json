@@ -1,0 +1,4 @@
+{
+    "id": "dokku-install",
+    "run_list": ["recipe[install-dokku]"]
+}

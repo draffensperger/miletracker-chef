@@ -1,0 +1,4 @@
+{
+    "id": "dokku",
+    "run_list": ["recipe[configure-dokku]"]
+}

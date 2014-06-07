@@ -1,0 +1,4 @@
+{
+    "id": "core-server",
+    "run_list": ["role[core-server]"]
+}

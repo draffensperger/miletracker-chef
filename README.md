@@ -55,15 +55,22 @@ Note that we now use the new port number for added security.
 
 If you change the Chef cookbooks, then this will need to be updated.
 
-        bin/knife solo cook deploy@localhost nodes/trackmiles.json
+        bin/knife solo cook deploy@testvm nodes/trackmiles.json
 
-Notes for myself:
+        bin/knife solo cook deploy@testvm nodes/dokku-install.json
+
+        bin/knife solo cook deploy@testvm nodes/dokku.json -V -l debug
+
+        bin/knife solo bootstrap deploy@testvm nodes/trackmiles.json
+
+        bin/knife solo bootstrap deploy@testvm nodes/core-server.json
+
+To push code to dokku:
+
+        git remote add test dokku@testvm:trackmiles
+        git push test master
 
 ============
-
-Do the dokku setup with a similar encrypted data bag for the environment variables
-Test the dokku setup with a deploy
-
 
 Add the key to Dokku by first SSH'ing into the host:
 
