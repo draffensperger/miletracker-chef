@@ -118,3 +118,4 @@ Push master to the server
 Visit http://localhost (assuming forwarded ports 80 and 443).
 
         EDITOR=leafpad knife solo data bag edit ssh-access common
+        EDITOR=leafpad knife solo data bag edit app-env trackmiles
