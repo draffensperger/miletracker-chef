@@ -1,0 +1,7 @@
+{
+    "id": "dokku-config",
+    "run_list": [
+        "recipe[setup-dokku::deploy_settings]",
+        "recipe[setup-dokku::firewall]"
+    ]
+}

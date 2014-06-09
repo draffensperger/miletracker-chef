@@ -1,4 +1,4 @@
-name             'install-dokku'
+name             'setup-dokku'
 maintainer       'David Raffensperger'
 maintainer_email 'contact@davidraff.com'
 license          'Apache 2.0'

@@ -10,6 +10,7 @@ user 'deploy' do
   password access['deploy_sudo_password']
   home '/home/deploy'
   shell '/bin/bash'
+  supports :manage_home => true
 end
 
 group 'sudo' do

@@ -51,19 +51,27 @@ Note that we now use the new port number for added security.
 
         bin/knife solo prepare deploy@localhost nodes/trackmiles.json
 
+        bin/knife solo prepare root@107.170.69.70
+
 ### Execute the Chef cookbook to setup the machine
 
 If you change the Chef cookbooks, then this will need to be updated.
 
-        bin/knife solo cook deploy@testvm nodes/trackmiles.json
+        bin/knife solo prepare root@107.170.69.70
+        bin/knife solo cook root@107.170.69.70 nodes/core-server.json -V -l debug
+        bin/knife solo cook deploy@107.170.69.70 nodes/dokku-install.json -V -l debug
+        bin/knife solo cook deploy@107.170.69.70 nodes/dokku-config.json -V -l debug
 
-        bin/knife solo cook deploy@testvm nodes/dokku-install.json
+        bin/knife solo cook deploy@10.0.0.14 nodes/core-server.json -V -l debug
+        bin/knife solo cook deploy@10.0.0.14 nodes/dokku-install.json -V -l debug
+        bin/knife solo cook deploy@10.0.0.14 nodes/dokku-config.json -V -l debug
+        bin/knife solo cook deploy@10.0.0.14 nodes/dokku-trackmiles.json -V -l debug
 
-        bin/knife solo cook deploy@testvm nodes/dokku.json -V -l debug
+This does it all at once:
 
-        bin/knife solo bootstrap deploy@testvm nodes/trackmiles.json
+        bin/knife solo cook deploy@testvm nodes/trackmiles.json -V -l debug
 
-        bin/knife solo bootstrap deploy@testvm nodes/core-server.json
+Try it on a DigitalOcean node.
 
 To push code to dokku:
 
@@ -119,3 +127,5 @@ Visit http://localhost (assuming forwarded ports 80 and 443).
 
         EDITOR=leafpad knife solo data bag edit ssh-access common
         EDITOR=leafpad knife solo data bag edit app-env trackmiles
+
+        nascar18
