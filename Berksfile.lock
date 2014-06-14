@@ -15,6 +15,9 @@ DEPENDENCIES
   openssh
   openssl
   resolver
+  s3cmd
+    git: git://github.com/freerobby/s3cmd.git
+    revision: aa6083fb8477aeec527d0874f4b6f41a00f5b6ed
 
 GRAPH
   apt (2.4.0)
@@ -90,6 +93,7 @@ GRAPH
     build-essential (>= 0.0.0)
     yum (~> 3.0)
     yum-epel (>= 0.0.0)
+  s3cmd (0.0.1)
   sudo (2.6.0)
   sysctl (0.6.0)
     ohai (>= 0.0.0)

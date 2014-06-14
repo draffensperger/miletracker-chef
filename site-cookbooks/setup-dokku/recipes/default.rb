@@ -64,9 +64,11 @@ bash 'Set trackmilesstaging REDIS_PROVIDER' do
   not_if 'dokku config trackmilesstaging | grep REDIS_PROVIDER'
 end
 
+# TODO: Secure the postgres database more carefully for staging/master/non-root users
+
 bash 'Create postgres database' do
   code <<-EOH
-  POSTGRES_IP=`docker inspect --format '{{ .NetworkSettings.IPAddress }}' postgres`
+  POSTGRES_IP=`docker inspect --format '{{.NetworkSettings.IPAddress}}' postgres`
   createdb -U postgres -h $POSTGRES_IP trackmiles_staging
   dokku config:set trackmilesstaging DATABASE_URL=postgres://postgres@$POSTGRES_IP/trackmiles_staging
   EOH

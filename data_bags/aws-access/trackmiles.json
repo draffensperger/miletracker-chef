@@ -1,0 +1,15 @@
+{
+  "id": "trackmiles",
+  "access_key": {
+    "encrypted_data": "F//otThz55u/gTP3xv2/6qiLV4JIfF3o0RKzSkAUEzgBCEu+jxhF5GZ9DfKW\nTNU3\n",
+    "iv": "V8PPaTw0jrK9pgLANULyCA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "secret_key": {
+    "encrypted_data": "a5dDBnTxsZEnBlNoqc7wYi2lhRfnCriYOZlVCyRZ12+AuvIpN7FtfXxT4BfR\nxTeMQ2r6tG39r4c8BvPyClkX2g==\n",
+    "iv": "vrZLG3GOfDtzN/kv/UXTHw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}
