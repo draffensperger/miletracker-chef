@@ -51,21 +51,17 @@ Note that we now use the new port number for added security.
 
         bin/knife solo prepare deploy@localhost nodes/trackmiles.json
 
-        bin/knife solo prepare root@107.170.69.70
+        bin/knife solo prepare root@162.243.69.172
 
 ### Execute the Chef cookbook to setup the machine
 
 If you change the Chef cookbooks, then this will need to be updated.
 
-        bin/knife solo prepare root@107.170.69.70
-        bin/knife solo cook root@107.170.69.70 nodes/core-server.json -V -l debug
-        bin/knife solo cook deploy@107.170.69.70 nodes/dokku-install.json -V -l debug
-        bin/knife solo cook deploy@107.170.69.70 nodes/dokku-config.json -V -l debug
-
-        bin/knife solo cook deploy@10.0.0.14 nodes/core-server.json -V -l debug
-        bin/knife solo cook deploy@10.0.0.14 nodes/dokku-install.json -V -l debug
-        bin/knife solo cook deploy@10.0.0.14 nodes/dokku-config.json -V -l debug
-        bin/knife solo cook deploy@10.0.0.14 nodes/dokku-trackmiles.json -V -l debug
+        ssh root@162.243.69.172
+        bin/knife solo prepare root@162.243.69.172
+        bin/knife solo bootstrap root@162.243.69.172 nodes/trackmiles.json -V -l debug
+        bin/knife solo cook deploy@162.243.69.172 nodes/trackmiles.json -V -l debug
+        bin/knife solo cook deploy@162.243.69.172 nodes/dev.json -V -l debug
 
 This does it all at once:
 
@@ -129,3 +125,9 @@ Visit http://localhost (assuming forwarded ports 80 and 443).
         EDITOR=leafpad knife solo data bag edit app-env trackmiles
 
         nascar18
+
+### General Plan
+
+1. dokku-simple but with creating the buildstack separately
+2. test it thoroughly on DigitalOcean. update firewall rules for 10.0.0.0/24 to SSH.
+3. test it on VirtualBox

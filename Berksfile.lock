@@ -2,6 +2,7 @@ DEPENDENCIES
   apt-periodic
   chef-solo-search
   curl
+  docker
   dokku
     git: git://github.com/fgrehm/chef-dokku.git
     revision: 25d805a58de715456a9c4ef9d2a722d2f2392c30

@@ -6,5 +6,7 @@ description      'Installs/Configures dokku for trackmiles'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
 depends 'firewall'
+depends 'docker'
 depends 'curl'
-depends 'dokku'
+depends 'dokku-simple'
+#depends 'dokku'

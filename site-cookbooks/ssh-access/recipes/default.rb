@@ -51,8 +51,7 @@ end
 node.set['openssh']['server'] = {
   port: access['ssh_port'],
   password_authentication: 'no',
-  permit_root_login: 'no',
-  use_p_a_m: 'no'
+  permit_root_login: 'no'
 }
 
 include_recipe 'firewall'
