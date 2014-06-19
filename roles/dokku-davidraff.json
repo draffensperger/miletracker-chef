@@ -4,7 +4,8 @@
     "description": "TrackMiles Server Configuration",
     "run_list": [
         "role[core-server]",
-        "recipe[setup-dokku]"
+        "recipe[setup-dokku]",
+        "recipe[pg-s3-backup]"
     ],
     "default_attributes": {
         "dokku": {
@@ -26,7 +27,7 @@
         "pg-s3-backup": {
             "dbs": ["trackmiles", "stagetrackmiles"],
             "bucket": "trackmiles_db_backup",
-            "aws-access": "s3backup"
+            "aws-access": "davidraff.com-s3backup"
         }
     }
 }

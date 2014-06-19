@@ -66,6 +66,7 @@ If you change the Chef cookbooks, then this will need to be updated.
         bin/knife solo cook deploy@162.243.69.172 nodes/dev.json -V -l debug
         bin/knife solo cook deploy@162.243.69.172 nodes/trackmiles.json -V -l debug
         bin/knife solo cook deploy@162.243.69.172 nodes/dokku-davidraff.json -V -l debug
+        bin/knife solo cook deploy@162.243.69.172 nodes/dokku-davidraff.json
 
 This does it all at once:
 
