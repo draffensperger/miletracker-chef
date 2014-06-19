@@ -42,7 +42,7 @@ access['ssh_allowed_hosts'].each do |allowed_host|
   firewall_rule 'ssh' do
     port access['ssh_port'].to_i
     protocol :tcp
-    source    allowed_host
+    source allowed_host
     action :allow
   end
 end

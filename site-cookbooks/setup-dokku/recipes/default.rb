@@ -1,5 +1,4 @@
 # TODO:
-# Make sure environment variables are unnecessarily quoted (modify ENV file, re-run chef)
 # Test the DATABASE_URL to verify that it works correctly
 
 # Prevent Docker from modifying firewall rules, only allow web access
@@ -64,8 +63,12 @@ apt_package "postgresql-contrib-#{pg_version}"
 apt_package 'redis-server'
 
 # Get docker gateway ip and allow access to postgres by docker hosts
-docker_subnet = `ip addr | awk '/inet/ && /docker0/{sub(/ .*$/,"",$2); print $2}'`.gsub("\n",'')
-docker_gateway = docker_subnet.split('/')[0]
+docker_ip_and_cidr = `ip addr | awk '/inet/ && /docker0/{sub(/ .*$/,"",$2); print $2}'`.gsub("\n",'')
+docker_gateway = docker_ip_and_cidr.split('/')[0]
+docker_cidr = docker_ip_and_cidr.split('/')[1]
+require 'ipaddr'
+docker_subnet = IPAddr.new(docker_ip_and_cidr).to_s + '/' + docker_cidr
+
 template "/etc/postgresql/#{pg_version}/main/postgresql.conf" do
   source 'postgresql.conf'
   owner  'postgres'
@@ -88,11 +91,28 @@ execute 'restart-postgres' do
   action :nothing
 end
 
+# Expose postgres and redis ports to the docker containers
+firewall_rule 'postgres-from-dokku-containers' do
+  port 5432
+  source docker_subnet
+  destination docker_gateway
+  protocol :tcp
+  action :allow
+end
+firewall_rule 'redis-from-dokku-containers' do
+  port 6379
+  source docker_subnet
+  destination docker_gateway
+  protocol :tcp
+  action :allow
+end
+
+# Configure the postgres connections for the applications
 pg_passwords = {}
 apps.each do |app|
   redis = app_config[app]['redis']
   if redis
-    app_env[app]['REDIS_PROVIDER'] ||= "redis://#{docker_gateway}:6379/#{redis}"
+    app_env[app]['REDIS_PROVIDER'] = "redis://#{docker_gateway}:6379/#{redis}"
   end
   pg = app_config[app]['postgres']
   if pg
@@ -106,16 +126,18 @@ apps.each do |app|
     execute "Create postgres database #{pg}" do
       user 'postgres'
       command "psql -c \"CREATE DATABASE #{pg} OWNER #{pg};\""
-      not_if "sudo -u postgres psql -U postgres -c \"select * from pg_database where datname='#{pg}'\" | grep -c #{pg}"
+      not_if "sudo -u postgres psql -c \"select * from pg_database where datname='#{pg}'\" | grep -c #{pg}"
     end
-    app_env[app]['DATABASE_URL'] ||= "postgres://#{pg}:#{pw}@#{docker_gateway}/#{pg}"
+    # Only set the DATABASE_URL if it hasn't been set before (when the database was created)
+    unless `dokku config #{app}` =~ /DATABASE_URL:/
+      app_env[app]['DATABASE_URL'] = "postgres://#{pg}:#{pw}@#{docker_gateway}/#{pg}"
+    end
   end
 end
 
 # Apply app environment variables
 apps.each do |app|
   conf = `dokku config #{app}`
-
   env_set_list = ''
   app_env[app].each do |k,v|
     env_set_list += " #{k}=#{v}" unless conf =~ /#{k}:\s+#{v}/
@@ -123,7 +145,7 @@ apps.each do |app|
 
   if env_set_list != ''
     execute "Set #{app} ENVs #{env_set_list}" do
-      command "dokku config:set #{app} #{env_set_list}"
+      command "dokku config:set #{app} '#{env_set_list}'"
       returns [0,1]
     end
   end
@@ -135,29 +157,29 @@ keys.delete 'id'
 keys.each do |name,key|
   bash 'sshcommand-acl-add' do
     code "echo '#{key}' | sshcommand acl-add dokku #{name}"
-    not_if "cat /home/dokku/.ssh/authorized_key | grep '#{key}'"
+    not_if "cat /home/dokku/.ssh/authorized_keys | grep '#{key}'"
   end
 end
 
 # Setup TLS certificates
 apps.each do |app|
-  if app['tls'] == 'true'
-    tls = EncryptedDataBagItem.load('tls-certs', "#{app}.#{vhost}").to_hash
+  if app_config[app]['tls'] == 'true'
+    tls = EncryptedDataBagItem.load('tls', "#{app}.#{vhost}").to_hash
     directory "/home/dokku/#{app}/tls" do
       user 'root'
       group 'root'
-      mode '0700'
+      mode '0755'
     end
     file "/home/dokku/#{app}/tls/server.crt" do
       user 'root'
       group 'root'
-      mode '0600'
+      mode '0400'
       content tls['crt']
     end
     file "/home/dokku/#{app}/tls/server.key" do
       user 'root'
       group 'root'
-      mode '0600'
+      mode '0400'
       content tls['key']
     end
   end
