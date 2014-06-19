@@ -1,4 +1,0 @@
-{
-    "id": "trackmiles",
-    "run_list": ["role[trackmiles]"]
-}

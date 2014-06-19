@@ -44,12 +44,14 @@ If you adapt these cookbooks for your own project, you will need to modify the
 encrypted data bags, e.g.:
 
         EDITOR=leafpad bin/knife solo data bag edit ssh-access common
+        EDITOR=leafpad bin/knife solo data bag edit ssh core-server
+        EDITOR=leafpad bin/knife solo data bag edit app-env trackmiles
 
 ### Setup Chef on the remote machine
 
 Note that we now use the new port number for added security.
 
-        bin/knife solo prepare deploy@localhost nodes/trackmiles.json
+        bin/knife solo prepare deploy@localhost nodes/common.json
 
         bin/knife solo prepare root@162.243.69.172
 
@@ -59,13 +61,15 @@ If you change the Chef cookbooks, then this will need to be updated.
 
         ssh root@162.243.69.172
         bin/knife solo prepare root@162.243.69.172
-        bin/knife solo bootstrap root@162.243.69.172 nodes/trackmiles.json -V -l debug
-        bin/knife solo cook deploy@162.243.69.172 nodes/trackmiles.json -V -l debug
+        bin/knife solo bootstrap root@162.243.69.172 nodes/common.json -V -l debug
+        bin/knife solo cook deploy@162.243.69.172 nodes/common.json -V -l debug
         bin/knife solo cook deploy@162.243.69.172 nodes/dev.json -V -l debug
+        bin/knife solo cook deploy@162.243.69.172 nodes/trackmiles.json -V -l debug
+        bin/knife solo cook deploy@162.243.69.172 nodes/dokku-davidraff.json -V -l debug
 
 This does it all at once:
 
-        bin/knife solo cook deploy@testvm nodes/trackmiles.json -V -l debug
+        bin/knife solo cook deploy@testvm nodes/common.json -V -l debug
 
 Try it on a DigitalOcean node.
 
@@ -101,34 +105,8 @@ Get the trackmiles code, cd to the directory then run:
 
 ### My next steps with Chef
 
-        dokku
-        https://github.com/fgrehm/chef-dokku
-
-        need to configure dokku plugins too, e.g. for postgres and rails
-
-        some day maybe set up PHP, etc.
-
-        new relic
-        http://community.opscode.com/cookbooks/newrelic
-
-
-### Push the TrackMiles code with to the machine
-
-Add remote
-Push master to the server
-
-### Test the deployment
-
-Visit http://localhost (assuming forwarded ports 80 and 443).
-
-        EDITOR=leafpad knife solo data bag create aws-access trackmiles
-        EDITOR=leafpad knife solo data bag edit ssh-access common
-        EDITOR=leafpad knife solo data bag edit app-env trackmiles
-
-        nascar18
-
-### General Plan
-
-1. dokku-simple but with creating the buildstack separately
-2. test it thoroughly on DigitalOcean. update firewall rules for 10.0.0.0/24 to SSH.
-3. test it on VirtualBox
+- Make the staging separate stagetrackmiles staging name
+- Make the production part of the server
+- Make it automatic so that I could configure a particular app
+- Make the postgres permissions more restrictive
+- Make it a recipe which takes parameters

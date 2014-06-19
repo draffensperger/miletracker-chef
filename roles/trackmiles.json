@@ -1,9 +1,0 @@
-{
-    "json_class": "Chef::Role",
-    "name": "trackmiles",
-    "description": "TrackMiles Server Configuration",
-    "run_list": [
-        "role[core-server]",
-        "recipe[setup-dokku]"
-    ]
-}

@@ -1,0 +1,4 @@
+{
+    "id": "dokku-davidraff",
+    "run_list": ["role[dokku-davidraff]"]
+}

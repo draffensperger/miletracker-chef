@@ -1,4 +1,0 @@
-{
-    "id": "dokku-install",
-    "run_list": ["recipe[setup-dokku::install]"]
-}

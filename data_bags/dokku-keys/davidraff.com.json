@@ -1,0 +1,9 @@
+{
+  "id": "davidraff.com",
+  "deploy": {
+    "encrypted_data": "V1QeLlPffUSzISmuaFRnSw/IOVG9TnLJjfxGvHumxIdSFefs4xZVhqEfsGc4\n3GCtHmzUJOoygyTLOIfe9Id2LdSyU8YnQsyc2D2VkE++EDdp5cb/BdSriRnb\njgYyG/JiDDaou45Svw6LTFHeYOofpGbzoYQiKpM910UtYr9uH8bP7BQsbpKN\n+VEuIKs2N0kuK2e0MOZM4aWTtaudjXsBtOh/VlxsKNjGAh6MrMACXZ38ABAj\no1qolsbIrkkapznbWSbatrai9S/xkF2WW17ZP77i7T11d38b65kN3c1i0ZS7\n+rS8Zp4p2Ykv9YVOy37zsxeztfXGuXTrC2RDJ30m4APotuXGKPaFenY5g9+1\nLUpGrGnA2Ht+g0qmGs2p/peJ3v497Vo+JzgqaqkD/23gv37vqHJztptS3qsw\ndrC0ijDE9aR64SArPHDNr6oeZs6C2WSlhguTfe7Tg1TksWYsfXtestxQRV5w\n5qUxbPSOGHU+htD+J82m4O6DrNUpTO4wBvmLeK2Z9TRpP9LxWd5bhg==\n",
+    "iv": "9Vu0LpWZt12/owFBRcKe/g==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

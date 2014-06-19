@@ -1,0 +1,32 @@
+{
+    "json_class": "Chef::Role",
+    "name": "dokku-davidraff",
+    "description": "TrackMiles Server Configuration",
+    "run_list": [
+        "role[core-server]",
+        "recipe[setup-dokku]"
+    ],
+    "default_attributes": {
+        "dokku": {
+            "tag": "v0.2.3",
+            "vhost": "davidraff.com",
+            "apps": {
+                "trackmiles": {
+                    "postgres": "trackmiles",
+                    "redis": "1",
+                    "tls": "true"
+                },
+                "stagetrackmiles": {
+                    "postgres": "stagetrackmiles",
+                    "redis": "2",
+                    "tls": "true"
+                }
+            }
+        },
+        "pg-s3-backup": {
+            "dbs": ["trackmiles", "stagetrackmiles"],
+            "bucket": "trackmiles_db_backup",
+            "aws-access": "s3backup"
+        }
+    }
+}

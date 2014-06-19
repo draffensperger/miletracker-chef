@@ -9,7 +9,7 @@
         "recipe[resolver]"
     ],
     "default_attributes": {
-        "ssh-access-databag": "common",
+        "ssh-access-databag": "core-server",
         "apt-periodic": {
             "unattended_upgrade_interioval": "1"
         },

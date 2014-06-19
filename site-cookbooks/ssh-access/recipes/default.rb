@@ -1,5 +1,4 @@
-access = EncryptedDataBagItem.load('ssh-access',
-                                   node['ssh-access-databag']).to_hash
+access = EncryptedDataBagItem.load('ssh', node['ssh-access-databag']).to_hash
 
 user 'root' do
   action :lock
@@ -33,7 +32,7 @@ file '/home/deploy/.ssh/authorized_keys' do
   content access['deploy_authorized_keys'].join('\r\n')
 end
 
-execute 'ufw --force reset'
+include_recipe 'firewall'
 
 firewall 'ufw' do
   action :enable
@@ -54,6 +53,5 @@ node.set['openssh']['server'] = {
   permit_root_login: 'no'
 }
 
-include_recipe 'firewall'
 include_recipe 'openssh'
 include_recipe 'fail2ban'

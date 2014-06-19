@@ -1,6 +1,0 @@
-{
-    "id": "dokku-trackmiles",
-    "run_list": [
-        "recipe[setup-dokku::trackmiles]"
-    ]
-}

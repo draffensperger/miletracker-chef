@@ -1,0 +1,99 @@
+{
+  "id": "stagetrackmiles",
+  "OAUTH_CLIENT_ID": {
+    "encrypted_data": "qY31krzDTl66rDRgEuYsB/qwIcAGDMHfjV9saCcSRXnxSas34BhMV0AFCqSp\nLVZkyZ09RFlrgz0DBenEn9HMaA==\n",
+    "iv": "xIGDD03CuTsckmxDR0JdDg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "OAUTH_CLIENT_SECRET": {
+    "encrypted_data": "GS1nHUMCz98C3G6EDTCkXHJtkCcxy8gRkiOeG+UH0Pyorwsk1E5OVGslzfHv\ntm2Y\n",
+    "iv": "gp6T6u/Pyy0089Dijllapw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "RAILS_SECRET_TOKEN": {
+    "encrypted_data": "whj6LG6UIUwA8b3N1bggeAOcgLIfHCAEI7A2/YZLNiPE7mi1+FBrnVh3soVl\nBvUi6/Vl4cn7dyRuUQqxmKKcwSSAxinUV8l+GNL/tqN7pLkEohHKaltapHye\nvdhCMQsp\n",
+    "iv": "hk9TG/g11Rna+uM8epYGxA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "RAILS_SECRET_KEY_BASE": {
+    "encrypted_data": "bxCOYNPJEO/7o0pAgznW5k1npv1IBCIRxjsglHJk8z75MY9J2GQonVEKOnjR\nSvfjOG24RlRRkfAD/CoDXYswKwefjmu55yKd0kFca+g7vfUTZUvI82afiQt6\nvY9kIHsb\n",
+    "iv": "G4StaUj9UDIvy7GEO6Zyyw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "DEVISE_SECRET_KEY": {
+    "encrypted_data": "nxXpl6XL0yZN5VK4pziKY+DCcV555XTjVeJppiBR8MBaMC2xN/ZMnFw22I4N\nqt/clwZrPGwc7pKs3EXKur57Pv40X8sWexz21gq8ftr8LVb5EXggRkH4N/vm\nhU45MdFe\n",
+    "iv": "Hok1VDMujl6i3hM0UWNeOw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "DEV_TEST_DB_PASSWORD": {
+    "encrypted_data": "920wy86ArrxXXQbRZHARj+gc9MTJgCF41cAD5qfz120=\n",
+    "iv": "icL7l8jluL37dFtF9sjiGQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "NEW_RELIC_LICENSE_KEY": {
+    "encrypted_data": "maIQsdI/BsgCsJ6BpNi7W6/k2EI31rcACXTV46vODxYF+hyBcDMaeaXFoRTn\nSFDtgrJ3z50tLSltHGRQ92F37g==\n",
+    "iv": "a4fxXhjhPTy9ghuC5fDFtg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SERVER_FROM_EMAIL": {
+    "encrypted_data": "d1Brgo/dMDpPmCOQ3X+dVdIQh9un2Le5mKK5Y85Ivs/jqacR5cwy6ZrOW3n6\n3wC/\n",
+    "iv": "+76fkBupXAWlW2ejFzRomQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_SERVER": {
+    "encrypted_data": "2BCKq7eS+UHwxyO+Lx8D5Ut1LnkAsH5rbFSdLa1Efz8QexhBuSQXUBeZHTbU\nAXMu\n",
+    "iv": "9flayUjAX6ViWJbNrd8crg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_PORT": {
+    "encrypted_data": "Rm1DtP7Gpsi490VxxUtLrWQGSYs2BVBLzWiFg4rI6Sc=\n",
+    "iv": "uc9k+MICtoszZZAZlS7Vhg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_AUTH": {
+    "encrypted_data": "fyyagGp5aa9TQXbT+BvL1VTt8GbwvKAaCu87MAMOyKE=\n",
+    "iv": "OWBcoxXrs1BX32WkMNEaKA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_USER": {
+    "encrypted_data": "EmgRehJ8O02+2/7Uj7+0PtUPsGMynOF0RsVER33u1OsIKO5eAOQLU76+xfR6\n5Wu5\n",
+    "iv": "Z3KCuDiRaZKZ8TCHmMqgJQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_PASSWORD": {
+    "encrypted_data": "46hSAyewlGhId2NTodH0DjLkoaQel9bOblhWWfLKG5d+txWKVaQ/w3jSD7ti\nlFcB\n",
+    "iv": "8iymmPQFudidDgbWxdsVAA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_STARTTLS_AUTO": {
+    "encrypted_data": "FrWCWB3auegUX3w6hUDzqBplv1MuW6ctpkR1o76xmjo=\n",
+    "iv": "X6hH8dWGEZfkVYnOL+hmTw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "SMTP_DOMAIN": {
+    "encrypted_data": "yl9sLD8vcQeo+NPqUptXVpw72RLMQw5kTsHpIQiErDc=\n",
+    "iv": "pKCb5YJwR4ddYfifI+ejnQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "MAPQUEST_API_KEY": {
+    "encrypted_data": "7XBazqKAm9oAxPvqtdoC1mgJi4QGSP0uMrFZT2gC/ZTBMsz/ipielxvBkDhi\nkR52QOKUo+JuShfphD3b3CaTSw==\n",
+    "iv": "bgi+Euf5j/7KWutzeETRwA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}
