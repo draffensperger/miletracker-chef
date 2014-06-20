@@ -8,9 +8,7 @@ DEPENDENCIES
   openssh
   openssl
   resolver
-  s3cmd
-    git: git://github.com/freerobby/s3cmd.git
-    revision: aa6083fb8477aeec527d0874f4b6f41a00f5b6ed
+  swap
 
 GRAPH
   apt (2.4.0)
@@ -28,7 +26,7 @@ GRAPH
     iptables (>= 0.0.0)
   openssl (1.1.0)
   resolver (1.1.4)
-  s3cmd (0.0.1)
+  swap (0.3.6)
   yum (3.2.0)
   yum-epel (0.3.6)
     yum (~> 3.0)

@@ -1,10 +1,19 @@
-# TODO:
-# Test the DATABASE_URL to verify that it works correctly
+# Digital Ocean doesn't provide swap, so we will set it up to allow more
+swap_file '/swapfile' do
+  size 1024 # MBs
+  persist true
+end
 
-# Prevent Docker from modifying firewall rules, only allow web access
+# Docker uses these if they aren't used by the machine (which they aren't)
+docker_gateway = '172.17.42.1'
+docker_subnet = '172.17.0.0/16'
+
+# Prevent Docker from modifying firewall rules
 file '/etc/default/docker' do
   content 'DOCKER_OPTS="--iptables=false"'
 end
+
+# Allow connections for http and https
 firewall_rule 'http' do
   port 80
   protocol :tcp
@@ -25,6 +34,20 @@ package 'wget'
 bash 'dokku-bootstrap' do
   code "wget -qO- https://raw.github.com/progrium/dokku/#{tag}/bootstrap.sh | sudo DOKKU_TAG=#{tag} DOKKU_ROOT=#{root} bash"
   not_if { File.exists?(version) and (File.open(version).read.chomp == tag) }
+end
+
+# Include rules for docker containers to connect to external network
+template '/etc/ufw/before.rules' do
+  source 'before.rules'
+  user 'root'
+  group 'root'
+  mode '0640'
+  variables docker_subnet: docker_subnet
+  notifies :run, 'execute[ufw-reload]', :immediately
+end
+execute 'ufw-reload' do
+  command 'ufw reload'
+  action :nothing
 end
 
 # Setup domain, you need this unless host can resolve dig +short $(hostname -f}"
@@ -62,13 +85,7 @@ apt_package "postgresql-#{pg_version}"
 apt_package "postgresql-contrib-#{pg_version}"
 apt_package 'redis-server'
 
-# Get docker gateway ip and allow access to postgres by docker hosts
-docker_ip_and_cidr = `ip addr | awk '/inet/ && /docker0/{sub(/ .*$/,"",$2); print $2}'`.gsub("\n",'')
-docker_gateway = docker_ip_and_cidr.split('/')[0]
-docker_cidr = docker_ip_and_cidr.split('/')[1]
-require 'ipaddr'
-docker_subnet = IPAddr.new(docker_ip_and_cidr).to_s + '/' + docker_cidr
-
+# Set up postgres to allow connections from docker containers
 template "/etc/postgresql/#{pg_version}/main/postgresql.conf" do
   source 'postgresql.conf'
   owner  'postgres'
@@ -107,6 +124,16 @@ firewall_rule 'redis-from-dokku-containers' do
   action :allow
 end
 
+# Get current app configurations
+cur_app_conf = {}
+apps.each do |app|
+  cur_app_conf[app] = ''
+  # Dokku may not be installed yet so check for it using which first
+  if `which dokku` != ''
+    cur_app_conf[app] = `dokku config #{app}`
+  end
+end
+
 # Configure the postgres connections for the applications
 pg_passwords = {}
 apps.each do |app|
@@ -129,7 +156,7 @@ apps.each do |app|
       not_if "sudo -u postgres psql -c \"select * from pg_database where datname='#{pg}'\" | grep -c #{pg}"
     end
     # Only set the DATABASE_URL if it hasn't been set before (when the database was created)
-    unless `dokku config #{app}` =~ /DATABASE_URL:/
+    unless cur_app_conf[app] =~ /DATABASE_URL:/
       app_env[app]['DATABASE_URL'] = "postgres://#{pg}:#{pw}@#{docker_gateway}/#{pg}"
     end
   end
@@ -137,10 +164,9 @@ end
 
 # Apply app environment variables
 apps.each do |app|
-  conf = `dokku config #{app}`
   env_set_list = ''
   app_env[app].each do |k,v|
-    env_set_list += " #{k}=#{v}" unless conf =~ /#{k}:\s+#{v}/
+    env_set_list += " #{k}=\"#{v}\"" unless cur_app_conf[app] =~ /#{k}:\s+\"#{v}\"/
   end
 
   if env_set_list != ''
@@ -183,4 +209,18 @@ apps.each do |app|
       content tls['key']
     end
   end
+end
+
+# Make it so that unmapped subdomains redirect to the vhost domain
+template '/etc/nginx/sites-available/default' do
+  source 'sites-available_default'
+  user 'root'
+  group 'root'
+  mode '0644'
+  variables default_redirect: "http://#{vhost}"
+  notifies :run, 'execute[restart-nginx]'
+end
+execute 'restart-nginx' do
+  command 'service nginx restart'
+  action :nothing
 end

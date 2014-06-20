@@ -1,28 +1,11 @@
-Options for dokku-simple
-Create a data bag on the fly
-Fork the project
-Be OK with an unencrypted public deploy key
+## Trackmiles Setup Instructions
 
-
-This Project gives information on how to deploy a server to run the TrackMiles website.
-This is useful for an actual deployment or for setting up a local staging or test environment.
-
-## Setup Instructions
-
-In this document, I'll be using the example of deploying to `localhost` on port 38214 (which could
-be forwarded to a virtual machine), but to deploy to a Droplet you would just change the port and machine.
-
-### Provision Virtual Machine, e.g. set up Ubuntu 14.04 VirtualBox or Digital Ocean Droplet, etc.
-Change root password if needed (Useful for Digital Ocean boxes)
-
-        ssh -t root@localhost 'passwd'
-
-### Set up basic secure access via public key if not already setup
-
-        cat ~/.ssh/id_rsa.pub | ssh root@localhost 'mkdir -p ~/.ssh; cat >> ~/.ssh/authorized_keys'
+These Chef cookbooks allow configuring a Dokku light weight PaaS for my personal projects hosted
+at subdomains of davidraff.com.
 
 ### Set up Chef Locally
-Install Chef
+
+Install Chef on your developer machine
 
         curl -L "https://www.getchef.com/chef/install.sh" | sudo bash
 
@@ -43,71 +26,56 @@ Install the Berkshelf cookbooks locally
 If you adapt these cookbooks for your own project, you will need to modify the
 encrypted data bags, e.g.:
 
-        EDITOR=leafpad bin/knife solo data bag edit ssh-access common
-        EDITOR=leafpad bin/knife solo data bag edit ssh core-server
-        EDITOR=leafpad bin/knife solo data bag edit app-env trackmiles
+        EDITOR=leafpad bin/knife solo data bag edit ssh-access core-server
 
-### Setup Chef on the remote machine
+### Provision Virtual Machine
 
-Note that we now use the new port number for added security.
+I use a Digital Ocean Droplet with Ubuntu 14.04.
 
-        bin/knife solo prepare deploy@localhost nodes/common.json
+### Configure your SSH to reuse connections
 
-        bin/knife solo prepare root@162.243.69.172
+Knife solo will run faster if it can re-use SSH connections to transfer files and execute code.
+Modify your `~/.ssh/config` file by adding these lines to re-use SSH connections:
 
-### Execute the Chef cookbook to setup the machine
+        Host *
+            ControlMaster auto
+            ControlPath ~/.ssh/control:%h:%p:%r
 
-If you change the Chef cookbooks, then this will need to be updated.
+### Run Chef on the remote machine
+
+To re-use the connections, open an SSH connectoin in one terminal tab to the host, e.g.
 
         ssh root@162.243.69.172
-        bin/knife solo prepare root@162.243.69.172
-        bin/knife solo bootstrap root@162.243.69.172 nodes/common.json -V -l debug
-        bin/knife solo cook deploy@162.243.69.172 nodes/common.json -V -l debug
-        bin/knife solo cook deploy@162.243.69.172 nodes/dev.json -V -l debug
-        bin/knife solo cook deploy@162.243.69.172 nodes/trackmiles.json -V -l debug
-        bin/knife solo cook deploy@162.243.69.172 nodes/dokku-davidraff.json -V -l debug
+
+Then run knife solo to bootstrap the node:
+
+        bin/knife solo bootstrap root@162.243.69.172 nodes/dokku-davidraff.json
+
+If you need to re-run the cookbook, use the `deploy` user and the `cook` command:
+
         bin/knife solo cook deploy@162.243.69.172 nodes/dokku-davidraff.json
 
-This does it all at once:
+To run it with debug output you can add `-V -l debug` to the end of the command.
 
-        bin/knife solo cook deploy@testvm nodes/common.json -V -l debug
+### Deploy the code with git
 
-Try it on a DigitalOcean node.
+Fetch the code for trackmiles
 
-To push code to dokku:
+        git clone https://github.com/draffensperger/miletracker.git
 
-        git remote add test dokku@testvm:trackmiles
-        git push test master
+Then in the `miletracker` folder, add git remote repositories
 
-============
+        git remote add stage dokku@162.243.69.172:stagetrackmiles
+        git push stage master
 
-Add the key to Dokku by first SSH'ing into the host:
+Then migrate the database changes
 
-        cat ~/.ssh/id_rsa.pub | ssh -p 2222 root@localhost "sudo sshcommand acl-add dokku trackmiles"
-        git remote add staging dokku@localhost:trackmiles2
-        git push staging master
+        ssh deploy@162.243.69.172 "dokku run stagetrackmiles rake db:migrate"
 
-Need to install a dokku plugin:
+### Visit the site
 
-        https://github.com/musicglue/dokku-user-env-compile
+The staging site should now be live at https://stagetrackmiles.davidraff.com
 
-        ssh deploy@localhost
+## License
 
-        ssh -p 2222 dokku@localhost
-
-        sudo chsh -s /bin/bash dokku
-
-Then transfer the authorized key to dokku
-
-        cat ~/.ssh/authorized_keys | sudo sshcommand acl-add dokku trackmiles
-        sudo restart ssh
-
-Get the trackmiles code, cd to the directory then run:
-
-### My next steps with Chef
-
-- Make the staging separate stagetrackmiles staging name
-- Make the production part of the server
-- Make it automatic so that I could configure a particular app
-- Make the postgres permissions more restrictive
-- Make it a recipe which takes parameters
+Apache 2.0

@@ -1,23 +1,31 @@
 # Set up S3 backup of databases
 
-aws_access = EncryptedDataBagItem.load('aws', node['pg-s3-backup']['aws-access']).to_hash
-node.set['s3cmd'] = {
-    aws_access_key_id: aws_access['access_key'],
-    aws_secret_access_key: aws_access['secret_key']
-}
+apt_package "s3cmd"
+
+aws = EncryptedDataBagItem.load('aws', node['pg-s3-backup']['aws-access']).to_hash
+
+template '/root/.s3cfg' do
+  source 's3cfg'
+  owner  'root'
+  group  'root'
+  mode '0600'
+  variables access_key: aws['access_key'], secret_key: aws['secret_key']
+end
+
+cookbook_file 's3backup_pg.sh' do
+  path '/root/s3backup_pg.sh'
+  user 'root'
+  group 'root'
+  mode '0700'
+  action :create
+end
 
 bucket = node['pg-s3-backup']['bucket']
 
-include_recipe 's3cmd'
-
 node['pg-s3-backup']['dbs'].each do |db|
-  cron "Backup database for #{db} daily to S3" do
+  cron "Backup database #{db} daily to S3" do
     hour '0'
     minute '0'
-    command %Q{
-sudo -u postgres pg_dump -C -Fc #{db} > /tmp/dump.tmp &&
-s3cmd put /tmp/dump.tmp s3://#{bucket}/#{db}/#{db}_`date +%Y_%m_%d`.dump &&
-rm /tmp/dump.tmp
-}.gsub("\n", ' ')
+    command "/root/s3backup_pg.sh #{bucket} #{db}"
   end
 end
