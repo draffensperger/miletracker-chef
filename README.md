@@ -44,16 +44,17 @@ Modify your `~/.ssh/config` file by adding these lines to re-use SSH connections
 ### Run Chef on the remote machine
 
 To re-use the connections, open an SSH connectoin in one terminal tab to the host, e.g.
+if the server address was ssh.davidraff.com,
 
-        ssh root@162.243.69.172
+        ssh root@ssh.davidraff.com
 
 Then run knife solo to bootstrap the node:
 
-        bin/knife solo bootstrap root@162.243.69.172 nodes/dokku-davidraff.json
+        bin/knife solo bootstrap root@ssh.davidraff.com nodes/dokku-davidraff.json
 
 If you need to re-run the cookbook, use the `deploy` user and the `cook` command:
 
-        bin/knife solo cook deploy@162.243.69.172 nodes/dokku-davidraff.json
+        bin/knife solo cook deploy@ssh.davidraff.com nodes/dokku-davidraff.json
 
 To run it with debug output you can add `-V -l debug` to the end of the command.
 
@@ -65,12 +66,16 @@ Fetch the code for trackmiles
 
 Then in the `miletracker` folder, add git remote repositories
 
-        git remote add stage dokku@162.243.69.172:stagetrackmiles
+        git remote add stage dokku@ssh.davidraff.com:stagetrackmiles
         git push stage master
 
 Then migrate the database changes
 
-        ssh deploy@162.243.69.172 "dokku run stagetrackmiles rake db:migrate"
+        ssh deploy@ssh.davidraff.com "dokku run stagetrackmiles rake db:migrate"
+
+Or, restore from a backup database:
+
+        pg_restore -v -c -x -O -h localhost -U stagetrackmiles -d stagetrackmiles db.dump
 
 ### Visit the site
 

@@ -22,6 +22,10 @@
                     "redis": "2",
                     "tls": "true"
                 }
+            },
+            "plugins": {
+                "supervisord": "https://github.com/statianzo/dokku-supervisord",
+                "rebuild": "https://github.com/scottatron/dokku-rebuild"
             }
         },
         "pg-s3-backup": {

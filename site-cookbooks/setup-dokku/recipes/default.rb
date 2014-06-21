@@ -1,6 +1,6 @@
 # Digital Ocean doesn't provide swap, so we will set it up to allow more
 swap_file '/swapfile' do
-  size 1024 # MBs
+  size 2048 # MBs
   persist true
 end
 
@@ -108,6 +108,20 @@ execute 'restart-postgres' do
   action :nothing
 end
 
+# Set up redis to allow connections from docker containers
+template "/etc/redis/redis.conf" do
+  source 'redis.conf'
+  user 'root'
+  group 'root'
+  mode '0644'
+  variables docker_gateway: docker_gateway
+  notifies :run, 'execute[restart-redis]', :immediately
+end
+execute 'restart-redis' do
+  command 'service redis-server restart'
+  action :nothing
+end
+
 # Expose postgres and redis ports to the docker containers
 firewall_rule 'postgres-from-dokku-containers' do
   port 5432
@@ -139,7 +153,7 @@ pg_passwords = {}
 apps.each do |app|
   redis = app_config[app]['redis']
   if redis
-    app_env[app]['REDIS_PROVIDER'] = "redis://#{docker_gateway}:6379/#{redis}"
+    app_env[app]['REDIS_URL'] = "redis://#{docker_gateway}:6379/#{redis}"
   end
   pg = app_config[app]['postgres']
   if pg
@@ -175,6 +189,21 @@ apps.each do |app|
       returns [0,1]
     end
   end
+end
+
+# Install dokku plugins
+# From: https://github.com/rlister/chef-dokku-simple/blob/master/recipes/plugins.rb
+node[:dokku][:plugins].each do |name, url|
+  git "/var/lib/dokku/plugins/#{name}" do
+    repository url
+    action :checkout
+    notifies :run, 'bash[dokku-plugins-install]'
+  end
+end
+bash 'dokku-plugins-install' do
+  cwd '/var/lib/dokku/plugins'
+  code 'dokku plugins-install'
+  action :nothing
 end
 
 # Setup Dokku deployment keys
